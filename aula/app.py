@@ -15,15 +15,18 @@ def home():
 @app.route('/games')
 
 def games():
-    titulo = 'CS-GO'
-    ano = 2012
-    categoria = 'FPS Online'
+    # Dicionario em Pyhton (objeto)
+    game = {
+        'Titulo' : 'CS-GO',
+        'Ano' : 2012,
+        'Categoria' : 'FPS Online'
+    }
+    
+
     jogadores = ['Miguel José', 'Miguel Isack', 'Leaf', 'quemario', 'Trop', 'Aspax', 'maxxdiego']
     jogos = ['Valorant', 'League Of Legends', 'Minecraft', 'GTA V', 'Free Fire', 'EA FC 25']
     return render_template('games.html',
-                           titulo = titulo,
-                           ano = ano,
-                           categoria = categoria,
+                           game = game,
                            jogadores=jogadores,
                            jogos = jogos)
 
