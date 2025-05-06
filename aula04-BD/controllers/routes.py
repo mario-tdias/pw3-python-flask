@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from models.database import Game
+from models.database import Game, Console, db
 # Lista de jogadores
 jogadores = ['Miguel José', 'Miguel Isack', 'Leaf',
              'Quemario', 'Trop', 'Aspax', 'maxxdiego']
@@ -46,9 +46,23 @@ def init_app(app):
                                gamelist=gamelist)
 
     #Rota de Estoque (CRUD)
-    @app.route('/estoque')
+    @app.route('/estoque', methods=["GET", "POST"])
     def estoque():
+
+        # Verificando se a requisição é POST
+           # = -> Atribuição
+            # == -> Comparação simpls (valor)
+            # === -> Compara valor e tipo de variável
         
+        if request.method == 'POST':
+            # Cadastra novo jogo
+            newgame = Game(request.form['titulo'], request.form['ano'], request.form['categoria'], request.form['plataforma'], request.form['preco'], request.form['quantidade'])
+            # Enviando para o Banco
+            db.session.add(newgame)
+            # Confirmando as alterações
+            db.session.commit()
+            return redirect(url_for('estoque'))
+         
         #criando um select no banco, todos os jogos da tabela: Game.delete, Game.add, Game.querry.all. GRAVADO NA VARIAVEL GAMESESTOQUE
         gamesestoque = Game.query.all()
         return render_template('estoque.html',

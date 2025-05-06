@@ -12,8 +12,8 @@ class Game(db.Model):
     plataforma = db.Column(db.String(150))
     preco = db.Column(db.Float)
     quantidade = db.Column(db.Integer)
-   
-    #  Método construtor da classe
+
+        #  Método construtor da classe
     def __init__(self, titulo, ano, categoria, plataforma, preco, quantidade):
         self.titulo = titulo
         self.ano = ano
@@ -21,3 +21,18 @@ class Game(db.Model):
         self.plataforma = plataforma
         self.preco = preco
         self.quantidade = quantidade
+
+class Console(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    nome = db.Column(db.String(150))
+    fabricante = db.Column(db.String(150))
+    preco = db.Column(db.Integer)
+    quantidade = db.Column(db.Integer)
+   
+
+    def __init__(self, nome, fabricante, preco, quantidade):
+        self.nome = nome
+        self.fabricante = fabricante
+        self.preco = preco
+        self.quantidade = quantidade
+
