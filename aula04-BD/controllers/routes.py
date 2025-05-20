@@ -109,3 +109,22 @@ def init_app(app):
         # fazendo um SELECT no banco (pegando todos os consoles da tabela)
         consolesestoque = Console.query.all()
         return render_template('estoqueConsoles.html', consolesestoque=consolesestoque)
+    
+    # Rota de EDIÇÃO de jogos
+    @app.route('/editgame/<int:id>' , methods=['GET', 'POST'])
+    def editgame(id):
+
+        game = Game.query.get(id)
+
+        #Editando o jogo com informações vindo do formulário
+        if request.method == "POST":
+            #Coletando as informações do form
+            game.titulo = request.form['titulo']
+            game.categoria = request.form['categoria']
+            game.plataforma = request.form['plataforma']
+            game.preco = request.form['preco']
+            game.quantidade = request.form['quantidade']
+            db.session.commit()
+            return redirect(url_for('estoqueGames'))
+
+        return render_template('editGames.html' , game=game)
