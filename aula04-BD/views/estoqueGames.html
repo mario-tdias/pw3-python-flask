@@ -42,7 +42,9 @@
             <td>R${{game.preco}}</td>
             <td>{{game.quantidade}}</td>
             <td>
-                <a style="text-decoration: none; color: orange;" href="{{url_for('edit', id=game.id)}}">Editar</a>
+                <a href="{{url_for('edit', id=game.id)}}" onclick="return confirm('Tem certeza que deseja editar este jogo?')">
+                    <button type="button" class="btn btn-warning">Editar</button>
+                </a>
                 <a href="{{url_for('estoqueGames', id=game.id)}}" onclick="return confirm('Tem certeza que deseja excluir este jogo?')">
                     <button type="button" class="btn btn-danger">Excluir</button>
                 </a>

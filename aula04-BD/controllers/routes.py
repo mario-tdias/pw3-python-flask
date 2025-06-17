@@ -148,4 +148,3 @@ def init_app(app):
         # GET request - mostra o formulário preenchido
         return render_template('editconsole.html', c=c)
     
-
