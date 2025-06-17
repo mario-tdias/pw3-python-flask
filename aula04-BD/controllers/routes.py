@@ -60,20 +60,24 @@ def init_app(app):
 
         # Verificando se a requisição é POST:
         if request.method == 'POST' and request.form.get("CadastrarJogo") == "true":
-            # cadastrando o novo jogo
-            novoJogo = Game(
-                request.form['titulo'],
-                request.form['ano'],
-                request.form['categoria'],
-                request.form['plataforma'],
-                request.form['preco'],
-                request.form['quantidade']
-            )
-            # Enviando para o banco
-            db.session.add(novoJogo)
-            # Confirmando as alterações
+           # Cadastra um novo jogo
+            newgame = Game(request.form['titulo'], request.form['ano'],
+            request.form['categoria'], request.form['plataforma'], request.form['preco'],
+            request.form['quantidade'])
+            db.session.add(newgame)
             db.session.commit()
             return redirect(url_for('estoqueGames'))
+        else:
+ # Captura o valor de 'page' que foi passado pelo método GET
+ # Define como padrão o valor 1 e o tipo inteiro
+            page = request.args.get('page', 1, type=int)
+ # Valor padrão de registros por página (definimos 3)
+        per_page = 3
+ # Faz um SELECT no banco a partir da pagina informada (page)
+ # Filtrando os registro de 3 em 3 (per_page)
+        games_page = Game.query.paginate(page=page,per_page=per_page)
+        return render_template('estoqueGames.html', gamesestoque=games_page)
+        
         
         # fazendo um SELECT no banco (pegando todos os jogos da tabela)
         gamesestoque = Game.query.all()
@@ -93,19 +97,55 @@ def init_app(app):
 
         # Verificando se a requisição é POST:
         if request.method == 'POST' and request.form.get("CadastrarConsole") == "true":
-            # cadastrando o novo console
-            novoConsole = Console(
+            # Cadastra um novo console
+            novoconsole = Console(
                 request.form['nome'],
                 request.form['fabricante'],
                 request.form['preco'],
                 request.form['quantidade']
             )
-            # Enviando para o banco
-            db.session.add(novoConsole)
-            # Confirmando as alterações
+            db.session.add(novoconsole)
             db.session.commit()
             return redirect(url_for('estoqueConsoles'))
         
-        # fazendo um SELECT no banco (pegando todos os consoles da tabela)
-        consolesestoque = Console.query.all()
-        return render_template('estoqueConsoles.html', consolesestoque=consolesestoque)
+        # Captura o valor de 'page' que foi passado pelo método GET
+        # Define como padrão o valor 1 e o tipo inteiro
+        page = request.args.get('page', 1, type=int)
+        # Valor padrão de registros por página (definimos 3)
+        per_page = 3
+        # Faz um SELECT no banco a partir da pagina informada (page)
+        # Filtrando os registros de 3 em 3 (per_page)
+        consoles_page = Console.query.paginate(page=page, per_page=per_page)
+        return render_template('estoqueConsoles.html', consolesestoque=consoles_page)
+
+    # CRUD - EDIÇÃO GAME
+    @app.route('/edit/<int:id>', methods=['GET', 'POST'])
+    def edit(id):
+        g = Game.query.get(id)
+        if request.method == 'POST':
+            g.titulo = request.form['titulo']
+            g.ano = request.form['ano']
+            g.categoria = request.form['categoria']
+            g.plataforma = request.form['plataforma']
+            g.preco = request.form['preco']
+            g.quantidade = request.form['quantidade']
+            db.session.commit()
+            return redirect(url_for('estoqueGames'))
+        # GET request - show the edit form
+        return render_template('editgame.html', g=g)
+    
+    # CRUD - EDIÇÃO DE CONSOLE
+    @app.route('/editconsole/<int:id>', methods=['GET', 'POST'])
+    def editconsole(id):
+        c = Console.query.get(id)
+        if request.method == 'POST':
+            c.nome = request.form['nome']
+            c.fabricante = request.form['fabricante']
+            c.preco = request.form['preco']
+            c.quantidade = request.form['quantidade']
+            db.session.commit()
+            return redirect(url_for('estoqueConsoles'))
+        # GET request - mostra o formulário preenchido
+        return render_template('editconsole.html', c=c)
+    
+

@@ -30,14 +30,14 @@
         </tr>
     </thead>
     <tbody>
-        {% for console in consolesestoque %}
+        {% for console in consolesestoque.items %}
         <tr>
             <td style="color: green;">{{console.nome}}</td>
             <td>{{console.fabricante}}</td>
             <td>R${{console.preco}}</td>
             <td>{{console.quantidade}}</td>
             <td>
-               
+                 <a style="text-decoration: none; color: orange;" href="{{url_for('editconsole', id=console.id)}}">Editar</a>
                 <a href="{{url_for('estoqueConsoles', id=console.id)}}" onclick="return confirm('Tem certeza que deseja excluir este console?')">
                     <button type="button" class="btn btn-danger">Excluir</button>
                 </a>
@@ -46,5 +46,14 @@
         {% endfor %}
     </tbody>
 </table>
-
+<p style="text-align: center;">
+<!-- Se houver registros anteriores -->
+{% if consolesestoque.has_prev %}
+<a href="{{url_for('estoqueConsoles', page=consolesestoque.prev_num)}}"><< Anterior</a>
+{% endif %}
+<!-- Se houver próximos registros -->
+{% if consolesestoque.has_next %}
+<a href="{{url_for('estoqueConsoles', page=consolesestoque.next_num)}}">Próximo >></a>
+{% endif %}
+</p>
 {% endblock content %}

@@ -32,7 +32,8 @@
         </tr>
     </thead>
     <tbody>
-        {% for game in gamesestoque %} 
+       <!-- for g in gamesestoque -->
+ {% for game in gamesestoque.items %}
         <tr>
             <td>{{game.titulo}}</td>
             <td>{{game.ano}}</td>
@@ -41,7 +42,7 @@
             <td>R${{game.preco}}</td>
             <td>{{game.quantidade}}</td>
             <td>
-         
+                <a style="text-decoration: none; color: orange;" href="{{url_for('edit', id=game.id)}}">Editar</a>
                 <a href="{{url_for('estoqueGames', id=game.id)}}" onclick="return confirm('Tem certeza que deseja excluir este jogo?')">
                     <button type="button" class="btn btn-danger">Excluir</button>
                 </a>
@@ -50,5 +51,15 @@
         {% endfor %}
     </tbody>
 </table>
+<p style="text-align: center;">
+ <!-- Se houver registros anteriores -->
+ {% if gamesestoque.has_prev %}
+ <a href="{{url_for('estoqueGames', page=gamesestoque.prev_num)}}"><< Anterior</a>
+ {% endif %}
+ <!-- Se houver próximos registros -->
+ {% if gamesestoque.has_next %}
+ <a href="{{url_for('estoqueGames', page=gamesestoque.next_num)}}">Próximo >></a>
+ </p>
+ {% endif %}
 {% endblock content %}
 
